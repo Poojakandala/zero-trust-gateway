@@ -1,62 +1,131 @@
+# 🔐 AI-Driven Zero Trust Risk Gateway
 
-# 🛡️ AI-Driven Zero Trust Risk Gateway
-**📌 Project Overview**
-In modern FinTech ecosystems, traditional perimeter security is no longer enough. Once a single internal service is compromised, attackers can move laterally to drain wallets or steal data.
+---
 
-Our solution implements a Zero Trust Architecture using an AI-Driven Security Gateway. Every single request—even from "trusted" internal sources—is evaluated in real-time by a Machine Learning model that detects anomalies in request frequency, payload size, and transaction timing.
+## 📌 Project Overview
 
-Core Innovation:
-Context-Aware AI: Uses a Random Forest Classifier to identify "Safe" vs. "Attack" traffic patterns.
+In modern **FinTech ecosystems**, traditional perimeter security is no longer enough.  
+If one internal service is compromised, attackers can move laterally and drain wallets or steal sensitive data.
 
-Real-Time Intervention: Automatically blocks high-risk requests before they reach the backend.
+This project implements a **Zero Trust Architecture** using an **AI-Driven Security Gateway**.
 
-Zero Trust Logic: "Never Trust, Always Verify" applied to every API call.
+Every API request — even from *trusted internal services* — is evaluated in real-time using Machine Learning.
 
-**🏗️ Technical Architecture**
-The system is built using a microservices approach:
+---
 
-Security Gateway (FastAPI): The entry point that intercepts all traffic.
+## 🚀 Core Innovation
 
-Risk Engine (Scikit-Learn): A pre-trained ML model that scores every request from 0.0 (Safe) to 1.0 (Critical).
+### 🧠 Context-Aware AI
+- Uses **Machine Learning models (Scikit-learn)**
+- Detects anomalies in:
+  - Request frequency  
+  - Payload behavior  
+  - Transaction timing  
+- Classifies traffic as:
+  - ✅ Safe  
+  - ❌ Suspicious  
 
-Stateful Rate Limiter (Redis): Tracks request bursts to prevent Brute Force and DDoS.
+### ⚡ Real-Time Intervention
+- High-risk API calls are **blocked before reaching backend services**
+- Prevents lateral movement attacks
 
-Audit Ledger (SQLite): A permanent, immutable record of all security decisions.
+### 🔐 Zero Trust Logic
+> **"Never Trust, Always Verify"**
 
-Live Threat Dashboard (Streamlit): Real-time visualization of network health and attack status.
+Applied to **every single API request**
 
-**🛠️ Tech Stack**
-- Language: Python 3.13
+---
 
-- Frameworks: FastAPI, Streamlit
+## 🏗 Technical Architecture
 
-- AI/ML: Scikit-Learn (Random Forest), Pandas, NumPy
+The system follows a **microservices-based architecture**:
 
-- Database: Redis (Cache/Rate-Limiting), SQLite (Audit Logs)
+### 1️⃣ Security Gateway (FastAPI)
+- Entry point for all internal API traffic
+- Intercepts every request
 
-- DevOps: Docker, Docker-Compose
+### 2️⃣ Identity Verification (PyJWT)
+- Validates JWT tokens
+- Checks expiration
+- Ensures trusted issuer
 
-**🚀 Installation & Setup**
-1. Clone the Project & Install Dependencies
-2. Train the AI Model
-Before starting the gateway, you must generate the synthetic training data and train the brain:
+### 3️⃣ AI Risk Engine (Scikit-learn)
+- Pre-trained anomaly detection model
+- Generates risk score between:
+  - `0.0 → Safe`
+  - `1.0 → Critical`
 
-This creates training_data.csv and gateway/model.pkl.
+### 4️⃣ Rate Limiting (Redis)
+- Monitors request frequency
+- Prevents brute-force or flooding attacks
 
-3. Run via Docker (Recommended)
-4. Manual Execution (Without Docker)
-Run these in 3 separate terminals:
+### 5️⃣ Audit Logging (SQLite)
+- Stores:
+  - Service name
+  - Risk score
+  - Decision (ALLOW / BLOCK)
+  - Timestamp
 
-- Gateway: python -m uvicorn gateway.main:app --port 8000
+### 6️⃣ Monitoring Dashboard (Streamlit)
+- Real-time analytics
+- Risk trend visualization
+- Blocked vs Allowed statistics
+- Service-level risk insights
 
-- Dashboard: streamlit run dashboard/dashboard.py
+---
 
-- Simulator: python simulate_traffic.py
+## 🔄 How It Works (Flow)
 
-📊 Evaluation Criteria for Judges
-🔮 Future Scope
-JWT Deep Inspection: Validating user identity claims within the gateway.
+1. Service sends API request  
+2. Gateway intercepts request  
+3. JWT token is verified  
+4. Rate limiting check is applied  
+5. AI model calculates risk score  
+6. Policy engine decides:
+   - ✅ Allow
+   - ❌ Block  
+7. Event is logged in database  
+8. Dashboard updates in real-time  
 
-Biometric Integration: Triggering MFA (Multi-Factor Authentication) automatically when the AI detects a high risk score.
+---
 
-Graph Analysis: Using Graph Neural Networks to detect complex money-laundering paths.
+## 🛡 Security Features
+
+- Zero Trust enforcement
+- AI-based anomaly detection
+- Dynamic risk scoring
+- Real-time blocking
+- Service-level monitoring
+- Containerized deployment (Docker)
+
+---
+
+## 🐳 Deployment
+
+The system is containerized using **Docker**, enabling:
+
+- Service isolation
+- Easy scaling
+- Real-world FinTech simulation
+
+---
+
+## 🎯 Impact
+
+This solution enhances internal API security in FinTech systems by:
+
+- Preventing lateral attacks
+- Detecting abnormal service behavior
+- Reducing insider threat risks
+- Enforcing adaptive, intelligent access control
+
+---
+
+## 💡 Future Enhancements
+
+- Behavioral profiling per service
+- Advanced ML ensemble models
+- SIEM integration
+- Blockchain-based audit integrity
+
+---
