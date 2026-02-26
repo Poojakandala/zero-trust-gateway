@@ -1,18 +1,17 @@
 version: '3.8'
 
 services:
-  # The Redis Cache for Rate Limiting
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
 
-  # The AI-Driven Gateway (FastAPI)
   gateway:
     build: .
     command: uvicorn gateway.main:app --host 0.0.0.0 --port 8000
     volumes:
       - .:/app
+      - ./gateway:/app/gateway   # 🔴 IMPORTANT FIX
     ports:
       - "8000:8000"
     depends_on:
@@ -20,12 +19,12 @@ services:
     environment:
       - REDIS_HOST=redis
 
-  # The Security Dashboard (Streamlit)
   dashboard:
     build: .
     command: streamlit run dashboard/dashboard.py --server.port 8501 --server.address 0.0.0.0
     volumes:
       - .:/app
+      - ./gateway:/app/gateway   # 🔴 IMPORTANT FIX
     ports:
       - "8501:8501"
     depends_on:
