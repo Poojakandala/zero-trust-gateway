@@ -1,27 +1,27 @@
-import joblib
-import pandas as pd
-
 class RiskEngine:
-    def __init__(self, model_path="model.pkl"):
-        # Load your pre-trained Isolation Forest or Random Forest
-        try:
-            self.model = joblib.load(model_path)
-        except:
-            self.model = None
+    def calculate_score(self, features):
+        freq = features.get("freq", 1)
+        depth = features.get("path_depth", 1)
+        hour = features.get("hour", 12)
 
-    def calculate_score(self, features: dict):
-        """
-        Features: {'req_freq': 10, 'payload_size': 1024, 'hour': 14}
-        Returns: Float (0.0 to 1.0)
-        """
-        if not self.model:
-            return 0.5 # Default neutral risk if model is missing
-            
-        df = pd.DataFrame([features])
-        # Model returns -1 for anomaly, 1 for normal
-        prediction = self.model.predict(df)[0]
-        confidence = self.model.decision_function(df)[0]
-        
-        # Convert to 0-1 scale where 1 is high risk
-        risk_score = 1 - ((confidence + 0.5) / 1.0) 
-        return max(0, min(1, risk_score))
+        score = 0.0
+
+        # High request rate → high risk
+        if freq > 50:
+            score += 0.5
+        elif freq > 20:
+            score += 0.3
+        else:
+            score += 0.1
+
+        # Deep API probing → suspicious
+        if depth > 4:
+            score += 0.3
+        else:
+            score += 0.1
+
+        # Late night attack window
+        if 0 <= hour <= 5:
+            score += 0.2
+
+        return min(score, 1.0)
