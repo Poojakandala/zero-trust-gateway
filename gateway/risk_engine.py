@@ -25,3 +25,4 @@ class RiskEngine:
             score += 0.2
 
         return min(score, 1.0)
+
